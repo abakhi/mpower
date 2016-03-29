@@ -1,7 +1,8 @@
 defmodule MpowerTest do
   use ExUnit.Case
-  alias MPower.{Client, Invoice, Store}
+  alias MPower.{Client, Invoice, Store, DirectMobile}
   doctest MPower
+
 
   test "defualt mode is sandbox mode" do
     assert Client.process_url("foo") == "https://app.mpowerpayments.com/sandbox-api/v1/foo"
@@ -49,8 +50,19 @@ defmodule MpowerTest do
       |> Invoice.create(store))
 
     token = response.data["token"]
-    created? = (response.response_code == "00"
-                && String.starts_with?(token, "test_"))
-    assert created?
+    assert (response.success && String.starts_with?(token, "test_"))
+  end
+
+  test "direct mobile charge only happens in live mode" do
+    dm = %DirectMobile{
+                 customer_name: "Ama",
+                 customer_phone: "0124223311",
+                 wallet_provider: "Airtel",
+                 amount: 2,
+                 merchant_name: "MPower Elixir Shop",
+             }
+    assert_raise MPower.Error, fn ->
+      DirectMobile.charge(dm)
+    end
   end
 end
