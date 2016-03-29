@@ -206,7 +206,8 @@ defmodule MPower.Store do
     :tagline,
     :postal_address,
     :phone,
-    :website_url
+    :website_url,
+    :logo_url
   ]
 end
 
