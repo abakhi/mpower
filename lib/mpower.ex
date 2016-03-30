@@ -137,8 +137,10 @@ defmodule MPower.Invoice do
   end
 
   def build(invoice, store) do
+    meta = Map.take(invoice, [:custom_data, :actions])
     invoice = Map.drop(invoice, [:custom_data, :actions])
     %{"invoice" => invoice, "store" => store}
+    |> Map.merge(meta)
   end
 
   def check_status(token) do
