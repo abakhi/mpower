@@ -3,6 +3,32 @@ defmodule MpowerTest do
   alias MPower.{Client, Invoice, Store, DirectMobile}
   doctest MPower
 
+  @test_invoice %MPower.Invoice{actions: nil, custom_data: nil, description: nil, items:
+                                %{"item_0" => %MPower.Invoice.Item{description: nil, name: nil,    quantity:
+                                                                   nil, total_price: nil, unit_price: nil},   "item_1" =>
+                                   %MPower.Invoice.Item{description: nil, name: nil, quantity: nil,
+                                                        total_price: nil, unit_price: nil},   "item_10" =>
+                                   %MPower.Invoice.Item{description: nil, name: nil, quantity: nil,
+                                                        total_price: nil, unit_price: nil},   "item_11" =>
+                                   %MPower.Invoice.Item{description: nil, name: nil, quantity: nil,
+                                                        total_price: nil, unit_price: nil},   "item_2" =>
+                                   %MPower.Invoice.Item{description: nil, name: nil, quantity: nil,
+                                                        total_price: nil, unit_price: nil},   "item_3" =>
+                                   %MPower.Invoice.Item{description: nil, name: nil, quantity: nil,
+                                                        total_price: nil, unit_price: nil},   "item_4" =>
+                                   %MPower.Invoice.Item{description: nil, name: nil, quantity: nil,
+                                                        total_price: nil, unit_price: nil},   "item_5" =>
+                                   %MPower.Invoice.Item{description: nil, name: nil, quantity: nil,
+                                                        total_price: nil, unit_price: nil},   "item_6" =>
+                                   %MPower.Invoice.Item{description: nil, name: nil, quantity: nil,
+                                                        total_price: nil, unit_price: nil},   "item_7" =>
+                                   %MPower.Invoice.Item{description: nil, name: nil, quantity: nil,
+                                                        total_price: nil, unit_price: nil},   "item_8" =>
+                                   %MPower.Invoice.Item{description: nil, name: nil, quantity: nil,
+                                                        total_price: nil, unit_price: nil},   "item_9" =>
+                                   %MPower.Invoice.Item{description: nil, name: nil, quantity: nil,
+                                                        total_price: nil, unit_price: nil}}, taxes: nil, total_amount: nil}
+
 
   test "defualt mode is sandbox mode" do
     assert Client.process_url("foo") == "https://app.mpowerpayments.com/sandbox-api/v1/foo"
@@ -29,12 +55,12 @@ defmodule MpowerTest do
     invoice = %Invoice{}
 
     invoice =
-      invoice
+      (invoice
       |> Invoice.add_items(items)
       |> Invoice.add_items(items)
-      |> Invoice.add_items(items)
+      |> Invoice.add_items(items))
 
-    assert length(invoice.items) == 12
+    assert invoice == @test_invoice
   end
 
   test "create invoice" do

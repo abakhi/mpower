@@ -9,6 +9,10 @@ defmodule MPower do
     """
     defstruct [:response_code, :response_text, :data, :success]
   end
+
+  defmodule Error do
+    defexception [:message]
+  end
 end
 
 defmodule MPower.Client do
@@ -148,7 +152,7 @@ defmodule MPower.Invoice do
       items ->
         old_items =
           items
-          |> Enum.map(&(Map.values(&1)))
+          |> Enum.map(fn {k,v} -> v end)
           |> List.flatten
 
         items = old_items ++ new_items
@@ -156,13 +160,13 @@ defmodule MPower.Invoice do
     end
   end
 
-  defp itemize(items, prefix \\ "item_") do
+  def itemize(items, prefix \\ "item_") do
     {xs, _acc} =
       Enum.map_reduce(items, 0, fn(x, acc) ->
-        {Map.put(%{}, "#{prefix}#{acc}", x), acc+1}
+        {{"#{prefix}#{acc}", x}, acc+1}
       end)
 
-    xs
+    xs |> Map.new
   end
 
   def add_taxes(invoice, new_taxes) when is_list(new_taxes) do
@@ -172,7 +176,7 @@ defmodule MPower.Invoice do
       taxes ->
         old_taxes =
         taxes
-        |> Enum.map(&(Map.values(&1)))
+        |> Enum.map(fn {k, v} -> v end)
         |> List.flatten
 
         taxes = old_taxes ++ new_taxes
@@ -268,8 +272,4 @@ defmodule MPower.DirectMobile do
     end
     MPower.Client.post("direct-mobile/status", %{"token" => token})
   end
-end
-
-defmodule MPower.Error do
-  defexception [:message]
 end
