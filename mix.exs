@@ -4,7 +4,7 @@ defmodule MPower.Mixfile do
   def project do
     [app: :mpower,
      version: "0.1.0",
-     elixir: "~> 1.0",
+     elixir: "~> 1.2",
      description: "Elixir wrapper for MPowerPayments API",
      source_url: "https://github.com/abakhi/mpower",
      package: package,

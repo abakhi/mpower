@@ -1,5 +1,9 @@
 sudo: false
 language: elixir
+elixir:
+  - 1.2.1
+  - 1.2.2
+  - 1.2.3
 env:
   - MPOWER_MASTER_KEY="5b9f531a-fbb8-487a-8045-3b4c7ac5acee"
   - MPOWER_PRIVATE_KEY="test_private_3NgIe4eR98bA3JvDn_zBCWnnSZE"
