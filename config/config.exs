@@ -30,6 +30,6 @@ use Mix.Config
 #     import_config "#{Mix.env}.exs"
 
 config :mpower,
-  master_key: "5b9f531a-fbb8-487a-8045-3b4c7ac5acee",
-  private_key: "test_private_3NgIe4eR98bA3JvDn_zBCWnnSZE",
-  token: "2f55bc094d9898292975"
+    master_key: System.get_env("MPOWER_MASTER_KEY"),
+    private_key: System.get_env("MPOWER_PRIVATE_KEY"),
+    token: System.get_env("MPOWER_TOKEN")

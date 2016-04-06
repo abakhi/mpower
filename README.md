@@ -1,6 +1,8 @@
-# Mpower
+# mpower
 
-**TODO: Add description**
+[![Build Status](https://travis-ci.org/abakhi/mpower.svg?branch=master)](https://travis-ci.org/abakhi/mpower)
+
+Elixir wrapper for MPowerPayments API
 
 ## Installation
 
