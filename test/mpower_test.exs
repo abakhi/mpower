@@ -75,8 +75,7 @@ defmodule MpowerTest do
       |> Invoice.add_action(%{"return_url" => "http://localhost:400/checkout"})
       |> Invoice.create(store))
 
-    token = response.data["token"]
-    assert (response.success && String.starts_with?(token, "test_"))
+    assert (response.success && Map.has_key?(response.data, "token"))
   end
 
   test "direct mobile charge only happens in live mode" do
