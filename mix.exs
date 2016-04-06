@@ -5,6 +5,9 @@ defmodule MPower.Mixfile do
     [app: :mpower,
      version: "0.1.0",
      elixir: "~> 1.2",
+     description: "Elixir wrapper for MPowerPayments API",
+     source_url: "https://github.com/abakhi/mpower",
+     package: package,
      build_embedded: Mix.env == :prod,
      start_permanent: Mix.env == :prod,
      deps: deps]
@@ -29,5 +32,16 @@ defmodule MPower.Mixfile do
   defp deps do
     [{:httpoison, "~> 0.8.2"},
     {:poison, "~> 2.1"}]
+  end
+
+  defp package do
+    [
+      maintainers: ["Yao Adzaku", "Kirk S. Agbenyegah"],
+      licenses: ["MIT"],
+      links: %{
+        "GitHub" => "https://github.com/abakhi/mpower",
+        "Documentation" => "http://hexdocs.pm/mpower"
+      }
+    ]
   end
 end
