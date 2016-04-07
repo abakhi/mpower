@@ -11,7 +11,7 @@ If [available in Hex](https://hex.pm/docs/publish), the package can be installed
   1. Add mpower to your list of dependencies in `mix.exs`:
 
         def deps do
-          [{:mpower, "~> 0.1.0"}]
+          [{:mpower, "~> 1.0"}]
         end
 
   2. Ensure mpower is started before your application:

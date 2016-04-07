@@ -13,3 +13,6 @@ before_script:
   - mix deps.get
 script:
   - mix test
+after_script:
+  - mix deps.get --only docs
+  - MIX_ENV=docs mix hex.docs

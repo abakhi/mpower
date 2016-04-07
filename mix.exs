@@ -3,7 +3,7 @@ defmodule MPower.Mixfile do
 
   def project do
     [app: :mpower,
-     version: "0.1.0",
+     version: "1.0.0",
      elixir: "~> 1.2",
      description: "Elixir wrapper for MPowerPayments API",
      source_url: "https://github.com/abakhi/mpower",
@@ -31,7 +31,11 @@ defmodule MPower.Mixfile do
   # Type "mix help deps" for more examples and options
   defp deps do
     [{:httpoison, "~> 0.8.2"},
-    {:poison, "~> 2.1"}]
+     {:poison, "~> 2.1"},
+
+     # Docs
+     {:ex_doc, "~> 0.10", only: :docs},
+     {:earmark, "~> 0.1", only: :docs}]
   end
 
   defp package do

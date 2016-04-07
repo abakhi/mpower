@@ -1,4 +1,16 @@
 defmodule MPower do
+  @moduledoc """
+  The library is built to map directly to the MPowerPayments REST API, so it's
+  just and API wrapper.
+
+  There are two primary ways of creating data:
+
+  - `build`: This builds the respective data structure, but does not send a
+  request to MPower's API. Use this to build a data that you'll later modify
+  with say, custom data, taxes etc.
+  - `create`: This `builds` and sends a request to MPower's API.
+  """
+
   defmodule Response do
     @moduledoc """
     MPower API response struct.
@@ -8,6 +20,12 @@ defmodule MPower do
     such data, we put them in the `data` field.
     """
     defstruct [:response_code, :response_text, :data, :success]
+
+    @type t :: %__MODULE__{
+              response_code: String.t,
+              response_text: String.t,
+              data: map,
+              success: boolean}
   end
 
   defmodule Error do
@@ -108,6 +126,8 @@ end
 
 
 defmodule MPower.Invoice do
+  @type t :: %__MODULE__{}
+
   defstruct [
     :total_amount,
     :description,
@@ -118,6 +138,8 @@ defmodule MPower.Invoice do
   ]
 
   defmodule Item do
+    @type t :: %__MODULE__{}
+
     defstruct [
       :name,
       :quantity,
@@ -128,14 +150,18 @@ defmodule MPower.Invoice do
   end
 
   defmodule Tax do
+    @type t :: %__MODULE__{}
+
     defstruct [:name, :amount]
   end
 
+  @spec create(MPower.Invoice.t, MPower.Store.t) :: MPower.Response.t
   def create(invoice, store) do
     body = build(invoice, store)
     MPower.Client.post("checkout-invoice/create", body)
   end
 
+  @spec build(MPower.Invoice.t, MPower.Store.t) :: map
   def build(invoice, store) do
     meta = Map.take(invoice, [:custom_data, :actions])
     invoice = Map.drop(invoice, [:custom_data, :actions])
@@ -143,10 +169,12 @@ defmodule MPower.Invoice do
     |> Map.merge(meta)
   end
 
+  @spec check_status(String.t) :: MPower.Response.t
   def check_status(token) do
     MPower.Client.get("checkout-invoice/confirm/#{token}")
   end
 
+  @spec add_items(MPower.Invoice.t, [MPower.Invoice.Item.t]) :: MPower.Invoice.t
   def add_items(invoice, new_items) when is_list(new_items) do
     case invoice.items do
       nil ->
@@ -154,7 +182,7 @@ defmodule MPower.Invoice do
       items ->
         old_items =
           items
-          |> Enum.map(fn {k,v} -> v end)
+          |> Enum.map(fn {_k,v} -> v end)
           |> List.flatten
 
         items = old_items ++ new_items
@@ -162,7 +190,8 @@ defmodule MPower.Invoice do
     end
   end
 
-  def itemize(items, prefix \\ "item_") do
+  @spec itemize([MPower.Invoice.Item.t], String.t) :: map
+  defp itemize(items, prefix \\ "item_") do
     {xs, _acc} =
       Enum.map_reduce(items, 0, fn(x, acc) ->
         {{"#{prefix}#{acc}", x}, acc+1}
@@ -171,6 +200,7 @@ defmodule MPower.Invoice do
     xs |> Map.new
   end
 
+  @spec add_taxes(MPower.Invoice.t, [MPower.Invoice.Tax]) :: MPower.Response.t
   def add_taxes(invoice, new_taxes) when is_list(new_taxes) do
     case invoice.taxes do
       nil ->
@@ -178,7 +208,7 @@ defmodule MPower.Invoice do
       taxes ->
         old_taxes =
         taxes
-        |> Enum.map(fn {k, v} -> v end)
+        |> Enum.map(fn {_k, v} -> v end)
         |> List.flatten
 
         taxes = old_taxes ++ new_taxes
@@ -186,6 +216,8 @@ defmodule MPower.Invoice do
     end
   end
 
+  @doc "Adds custom data (metadata) to the request"
+  @spec add_meta(MPower.Invoice.t, map) :: MPower.Invoice.t
   def add_meta(invoice, metadata) do
     case invoice.custom_data do
       nil ->
@@ -195,6 +227,7 @@ defmodule MPower.Invoice do
     end
   end
 
+  @spec add_action(MPower.Invoice.t, map) :: MPower.Invoice.t
   def add_action(invoice, action_kv) do
     case invoice.actions do
       nil ->
@@ -207,6 +240,8 @@ end
 
 
 defmodule MPower.Store do
+  @type t :: %__MODULE__{}
+
   defstruct [
     :name,
     :tagline,
@@ -219,9 +254,13 @@ end
 
 
 defmodule MPower.OPR do
+  @type t :: %__MODULE__{}
+
   defstruct [:store, :invoice, :opr_data]
 
   defmodule Data do
+    @type t :: %__MODULE__{}
+
     defstruct [:account_alias]
   end
 
@@ -243,6 +282,8 @@ defmodule MPower.OPR do
 end
 
 defmodule MPower.DirectPay do
+  @type t :: %__MODULE__{}
+
   defstruct [:account_alias, :amount]
 
   def credit_account(account_alias, amount) do
@@ -252,6 +293,8 @@ defmodule MPower.DirectPay do
 end
 
 defmodule MPower.DirectMobile do
+  @type t :: %__MODULE__{}
+
   defstruct [
     :customer_name,
     :customer_phone,
