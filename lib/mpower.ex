@@ -288,7 +288,7 @@ defmodule MPower.DirectPay do
 
   def credit_account(account_alias, amount) do
     body = %__MODULE__{account_alias: account_alias, amount: amount}
-    MPower.Client.post("direct-pay/credi-account", body)
+    MPower.Client.post("direct-pay/credit-account", body)
   end
 end
 
