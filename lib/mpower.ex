@@ -1,7 +1,7 @@
 defmodule MPower do
   @moduledoc """
   The library is built to map directly to the MPowerPayments REST API, so it's
-  just and API wrapper.
+  just an API wrapper.
 
   There are two primary ways of creating data:
 
